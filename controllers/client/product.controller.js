@@ -29,6 +29,10 @@ module.exports.detail=async(req, res) => {
             status: "active"
         }
         const product = await Product.findOne(find);
+        if (!product) {
+            // Trường hợp không tìm thấy sản phẩm
+            return res.redirect(`/products`);
+        }
         //console.log(product);
         if(product.product_category_id){
             const category=await ProductCategory.findOne({
@@ -36,7 +40,12 @@ module.exports.detail=async(req, res) => {
                 status: "active",
                 delete: false
             })
-            product.category=category;
+            if (category) {
+                product.category = category;
+            } else {
+                // Trường hợp không tìm thấy danh mục
+                product.category = null;
+            }
         }
         product.priceNew=productsHepler.priceNewProduct(product);
         res.render("Client/pages/products/detail", {
@@ -57,7 +66,10 @@ module.exports.category=async(req, res) => {
         slug: req.params.slugCategory,
         delete: false
     })
-
+    if (!category) {
+        // Trường hợp không tìm thấy danh mục
+        return res.redirect(`/products`);
+    }
     
     const listSubCategory=await productsCategoryHepler.getSubCategory(category.id);
     const listSubCategoryId=listSubCategory.map(item=>item.id);
