@@ -35,17 +35,23 @@ module.exports.create = async (req, res) => {
 //[POST] /admin/products-category/create
 
 module.exports.createPost = async (req, res) => {
-    console.log(req.body);
-    if (req.body.position == "") {
-        const countProducts = await ProductCategory.countDocuments();
-        //console.log(countProducts);
-        req.body.position = countProducts + 1;
+    const permissions = res.locals.role.permissions;
+    if (permissions.include("products-category_create")) {
+        console.log(req.body);
+        if (req.body.position == "") {
+            const countProducts = await ProductCategory.countDocuments();
+            //console.log(countProducts);
+            req.body.position = countProducts + 1;
+        } else {
+            req.body.position = parseInt(req.body.position)
+        }
+        const record = new ProductCategory(req.body)
+        await record.save();
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     } else {
-        req.body.position = parseInt(req.body.position)
+        return;
     }
-    const record = new ProductCategory(req.body)
-    await record.save();
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+
 }
 
 //[GET] /admin/product-category/edit/id
@@ -86,22 +92,22 @@ module.exports.editPatch = async (req, res) => {
 module.exports.detail = async (req, res) => {
     console.log(req.body);
     const id = req.params.id;
-    
+
     const data = await ProductCategory.findOne({
         _id: id,
         delete: false
     })
-    const parent=await ProductCategory.findOne({
+    const parent = await ProductCategory.findOne({
         _id: data.parent_id,
         delete: false
     })
-    if(parent){
-        data.parent_id=parent.title
+    if (parent) {
+        data.parent_id = parent.title
     }
     res.render("admin/pages/product-category/detail", {
-        pageTitle: "Chi tiet danh mục sản phẩm",       
-        data:data
-    })   
+        pageTitle: "Chi tiet danh mục sản phẩm",
+        data: data
+    })
 }
 
 
