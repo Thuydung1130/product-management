@@ -1,6 +1,9 @@
+
 //[get] /
-module.exports.index=(req, res) => {
+module.exports.index=async(req, res) => {
+    
     res.render("Client/pages/home/index",{
-        pageTitle:"Trang chu"
+        pageTitle:"Trang chủ",
+        
     });
 }

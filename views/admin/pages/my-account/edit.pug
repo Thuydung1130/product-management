@@ -1,74 +1,82 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
-include ../../mixins/select-tree
+include ../../mixins/select-tree.pug
 block main 
-    if(role.permissions.includes("products-category_create"))
-        h1(class="mb-4") Thêm mới danh mục sản phẩm
+    if(role.permissions.includes("accounts_edit"))
         +alert-error( 5000)
-    
+        +alert-success(5000)
+        h1(class="mb-4") Chỉnh sửa thông tin cá nhân
+
         form(
-            action=`${prefixAdmin}/products-category/create`
-            id="form-create-product"
+            action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+            
             method="POST"
             enctype="multipart/form-data"
         )
+            input(type="hidden", name="id", value=user._id)
             div(class="form-group")
-                label(for="title") Tieu đề 
+                label(for="fullName") Họ tên*
                 input(
                     type="text"
                     class="form-control"
-                    id="title"
-                    name="title"
+                    id="fullName"
+                    name="fullName"
                     required
+                    value=user.fullName 
                 )
             div(class="form-group")
-                label(for="parent_id") Danh mục cha 
+                label(for="email") Email*
+                input(
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                    value=user.email 
+                )
                 
-                select(
-                    name="parent_id"
-                    id="parent_id"
-                    class="form-control"
-                )
-                    option(value="")  --Chọn danh mục cha--
-                    if(records)
-                        +select-tree(records)
             div(class="form-group")
-                label(for="desc") Mô tả 
-                textarea(
-                    name="description"
-                    id="desc"
+                label(for="password") Mật khẩu*
+                input(
+                    type="password"
                     class="form-control"
-                    rows="5"
+                    id="password"
+                    name="password"
+                    
                 )
+            div(class="form-group")
+                label(for="phone") Số điện thoại
+                input(
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    class="form-control"
+                    value=user.phone 
+                )
+            
+            
             div(
                 class="form-group"
                 upload-image
             )
             div(class="form-group")
-                label(for="thumbnail") Ảnh  
+                label(for="avatar") Avatar 
                 input(
                     type="file"
-                    name="thumbnail"
-                    id="thumbnail"
+                    name="avatar"
+                    id="avatar"
                     class="form-control-file"
                     accept="image/*"
                     upload-image-input
                 )
                 img(
-                    src=""
+                    src=user.avatar
                     upload-image-preview
                     class="image-preview"
                 )
-            div(class="form-group")
-                label(for="position") Vị trí  
-                input(
-                    type="number"
-                    name="position"
-                    id="position"
-                    class="form-control"
-                    placeholder="Tự động tăng"
-                    min="1"
-                )
+            
+            
+                        
             div(class="form-group form-check form-check-inline")
                 
                 input(
@@ -77,7 +85,7 @@ block main
                     id="statusAvtive"
                     class="form-check-input"
                     value="active"
-                    checked
+                    checked=(user.status==='active'?true:false)
                 )
                 label(for="statusActive" class="form-check-label") Hoạt động 
             div(class="form-group form-check form-check-inline")
@@ -85,17 +93,16 @@ block main
                 input(
                     type="radio"
                     name="status"
-                    id="statusInavtive"
+                    id="statusAvtive"
                     class="form-check-input"
                     value="inactive"
-                    
+                    checked=(user.status==='inactive'?true:false)
                 )
-                label(for="statusInactive" class="form-check-label") Dừng hoạt động
+                label(for="statusActive" class="form-check-label") Dừng hoạt động
             div(class="form-group")
                 button(
                     type="submit"
                     class="btn btn-primary"
-    
-                ) Tạo mới 
-    
-        
+
+                ) Cập nhật
+
