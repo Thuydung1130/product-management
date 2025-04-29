@@ -2,3 +2,50 @@ extends ../../layouts/default.pug
 
 block main 
     h1 Trang tong quan
+    .row.mt-4 
+        .col-12 
+            .card.md-4
+                .card-header Thông tin tài khoản 
+                .card-body 
+                    if(user.avatar)
+                        img(
+                            src=user.avatar 
+                            style="height: 100px; margin-bottom:15px;"
+                        )
+                    if(user.fullName)
+                        p Họ tên: <b>#{user.fullName}</b>
+                    if(user.email)
+                        p Họ tên: <b>#{user.email}</b>
+                    if(user.phone)
+                        p Họ tên: <b>#{user.phone}</b>
+                    if(role.title)
+                        p Họ tên: <b>#{role.title}</b>
+    .row 
+        .col-6 
+            .card.mb-4 
+                .card-header Danh mục sản phẩm 
+                .card-body 
+                    p Số lượng: <b>#{statstic.categoryProduct.total}</b>
+                    p Hoạt động: <b>#{statstic.categoryProduct.active}</b>
+                    p Sản phẩm: <b>#{statstic.categoryProduct.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Sản phẩm 
+                .card-body 
+                    p Số lượng: <b>#{statstic.product.total}</b>
+                    p Hoạt động: <b>#{statstic.product.active}</b>
+                    p Sản phẩm: <b>#{statstic.product.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tải khoản admin 
+                .card-body 
+                    p Số lượng: <b>#{statstic.account.total}</b>
+                    p Hoạt động: <b>#{statstic.account.active}</b>
+                    p Sản phẩm: <b>#{statstic.account.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tài khoản Client
+                .card-body 
+                    p Số lượng: <b>#{statstic.user.total}</b>
+                    p Hoạt động: <b>#{statstic.user.active}</b>
+                    p Sản phẩm: <b>#{statstic.user.inactive}</b>

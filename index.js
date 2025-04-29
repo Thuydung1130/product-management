@@ -64,6 +64,11 @@ app.use(express.static(`${__dirname}/public`));
 //cau hinh route
 routeAdmin(app);
 route(app);
+app.get("*",(req,res)=>{
+  res.render("Client/pages/errors/404",{
+    pageTitle:"404 Not Found",
+  })
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
